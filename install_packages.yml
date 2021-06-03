@@ -1,0 +1,17 @@
+---
+- name : installing packages
+  hosts : web_server
+  become : True
+  tasks :
+  - name : installing set of packages
+    yum :
+     #name : ['git', 'make', 'gcc', 'wget', 'telnet', 'gzip']
+      name : "{{ item }}"
+      state : installed
+    with_items :
+        - git
+        - make
+        - gcc
+        - wget
+        - telnet
+        - gziip    

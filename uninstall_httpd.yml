@@ -1,0 +1,15 @@
+---
+- name : installing packages
+  hosts : web_server
+  become : True
+  tasks :
+  - name : service is stopping
+    service :
+     name : httpd
+     state : stopped
+  - name : uninstalling a httpd
+    yum :
+     name : httpd
+     state : removed
+
+     

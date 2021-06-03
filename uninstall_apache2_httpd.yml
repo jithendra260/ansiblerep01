@@ -1,0 +1,30 @@
+---
+- name : installing packages httpd on redhat servers and apache2 on debian server
+  hosts : all
+  become : True
+  tasks :
+  - name : httpd is stopping
+    service :
+      name : httpd
+      state : stopped
+    when : ansible_os_family=="RedHat"   
+
+  - name : uninstalling a httpd
+    yum :
+      name : httpd
+      state : removed
+    when : ansible_os_family=="RedHat"
+ 
+  - name : stopping apache2 
+    service :
+      name : apache2
+      state : stopped
+    when : ansible_os_family=="Debian"
+
+  - name : uninstalling a apache2
+    apt :
+      name : apache2
+      state : absent
+    when : ansible_os_family=="Debian"
+ 
+

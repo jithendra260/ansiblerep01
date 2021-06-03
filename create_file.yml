@@ -1,0 +1,10 @@
+---
+- name : creating a files or directories
+  hosts : all
+  #become : True
+  gather_facts : no
+  tasks :
+  - name : creating a directory
+    file :
+      path : /home/ansadmin/san2
+      state : directory      

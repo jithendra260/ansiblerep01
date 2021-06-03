@@ -1,0 +1,11 @@
+---
+- name : creating a new user
+  hosts : all
+  become : True
+  vars_files :
+        - user.yml 
+
+  tasks :
+  - name : creating a {{ user }}
+    user :
+      name : "{{ user }}"   

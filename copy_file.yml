@@ -1,0 +1,11 @@
+---
+- name : copy an file from control node to managing nodes
+  hosts : all
+  become : True
+  tasks :
+  - name : copying a index.html file
+    copy :
+      src : /opt/ansible/index.html
+      dest : /home/ansadmin
+      mode : 0600
+      owner : naveena      

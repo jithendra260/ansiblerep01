@@ -1,0 +1,15 @@
+---
+- name : installing packages
+  hosts : db_server
+  become : True
+  tasks :
+  - name : installing apache2
+    apt :
+     name : apache2
+     state : present
+  - name : service is starting
+    service :
+     name : apache2
+     state : started
+
+     

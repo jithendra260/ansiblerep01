@@ -1,0 +1,8 @@
+---
+- name : installing packages httpd on redhat servers and apache2 on debian server
+  hosts : all
+  become : True
+  roles :
+    - setup-apache      
+   
+

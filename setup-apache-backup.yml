@@ -1,0 +1,77 @@
+---
+- name : installing packages httpd on redhat servers and apache2 on debian server
+  hosts : all
+  become : True
+  vars :
+    port : 8082
+  tasks :
+  - name : installing httpd
+    yum :
+      name : httpd
+      state : installed
+    when : ansible_os_family=="RedHat"
+    notify : service is starting httpd
+   
+    
+  - name : installing apache2
+    apt :
+      name : apache2
+      state : present
+    when : ansible_os_family=="Debian"
+    notify : apache is starting
+  
+  - name : copy index.html
+    copy :
+      src : /opt/ansible/index.html
+      dest : /var/www/html
+      mode : 0666      
+  
+  - name: Ensure the default Apache port is {{ port }}
+    ansible.builtin.lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^Listen '
+      insertafter: '^#Listen '
+      line: Listen {{ port }}
+    when : ansible_os_family == "RedHat"
+    notify : restart the httpd
+
+
+  - name: Ensure the default Apache port is {{ port }}
+    ansible.builtin.lineinfile:
+      path: /etc/apache2/ports.conf
+      regexp: '^Listen '
+      insertafter: '/etc/apache2/sites-enabled/000-default.conf'
+      line: Listen {{ port }}
+   
+    when : ansible_os_family == "Debian"
+    notify : restart apache2  
+
+
+
+  handlers :
+  - name : service is starting httpd
+    service :
+      name : httpd
+      state : started
+    when : ansible_os_family=="RedHat"
+
+  - name : apache is starting
+    service :
+      name : apache2
+      state : started
+    when : ansible_os_family=="Debian"
+
+  - name : restart the httpd
+    service :
+      name : httpd
+      state : restarted
+    when : ansible_os_family=="RedHat"
+
+  - name : restart apache2
+    service :
+      name : apache2
+      state : restarted
+    when : ansible_os_family=="Debian"
+
+   
+

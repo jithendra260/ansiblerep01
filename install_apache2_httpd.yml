@@ -1,0 +1,36 @@
+---
+- name : installing packages httpd on redhat servers and apache2 on debian server
+  hosts : all
+  become : True
+  tasks :
+  - name : installing httpd
+    yum :
+      name : httpd
+      state : installed
+    when : ansible_os_family=="RedHat"
+
+  - name : service is starting
+    service :
+      name : httpd
+      state : started
+    when : ansible_os_family=="RedHat"
+    #ignore_errors : yes
+    
+  - name : installing apache2
+    apt :
+      name : apache2
+      state : present
+    when : ansible_os_family=="Debian"
+
+  - name : service is starting
+    service :
+      name : apache2
+      state : started
+    when : ansible_os_family=="Debian"
+  
+  - name : copy index.html
+    copy :
+      src : /opt/ansible/index.html
+      dest : /var/www/html
+      mode : 0666      
+

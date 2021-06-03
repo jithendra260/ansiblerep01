@@ -1,0 +1,34 @@
+---
+- name : installing tomcat
+  hosts : all
+  become : yes
+  tasks :
+   - name : installing java on redhat servers
+     yum :
+       name : java
+       state : installed
+     when : ansible_os_family=="RedHat"
+   - name : installing java on Debian server
+     apt :
+       name : default-jdk
+       state : present
+     when : ansible_os_family=="Debian"
+   - name : download tomcat packages
+     get_url :
+        url : https://apachemirror.wuchna.com/tomcat/tomcat-10/v10.0.6/bin/apache-tomcat-10.0.6.tar.gz
+        dest : /opt
+   - name :  untar the tomcat
+     unarchive :
+        src : /opt/apache-tomcat-10.0.6.tar.gz
+        dest : /opt
+        remote_src : yes
+   - name : giving execution permissions to startup.sh file
+     file :
+       path : /opt/apache-tomcat-10.0.6/bin/startup.sh
+       mode : 0777
+   - name : start tomcat service
+     shell : nohup ./startup.sh
+     args :
+        chdir : /opt/apache-tomcat-10.0.6/bin      
+
+     
